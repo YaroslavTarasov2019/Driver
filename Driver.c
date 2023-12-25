@@ -96,32 +96,35 @@ NTSTATUS ReadComplete(PDEVICE_OBJECT DeviceObject, PIRP Irp, PVOID Context)
         }
         else
         {
-            if (CHOOSE_TABLE_CODE == ORIGINAL_TABLE) {
-                KdPrint(("Input: Scan code %x (%s)\r\n", Keys[0].MakeCode, keyflag[Keys[0].Flags]));
-            }
-            else if (CHOOSE_TABLE_CODE == ASCII_TABLE) {
-                for (ULONG j = 0; j < ARRAYSIZE(gMappingTable); ++j) {
-                    if (gMappingTable[j].scanCode == Keys[0].MakeCode) {
-                        Change_Signal(Keys, j, structnum, keyflag, Irp);
-                        break;
+            switch (CHOOSE_TABLE_CODE)
+            {
+                case ORIGINAL_TABLE:
+                    KdPrint(("Input: Scan code %x (%s)\r\n", Keys[0].MakeCode, keyflag[Keys[0].Flags]));
+                    break;
+                case ASCII_TABLE:
+                    for (ULONG j = 0; j < ARRAYSIZE(gMappingTable); ++j) {
+                        if (gMappingTable[j].scanCode == Keys[0].MakeCode) {
+                            Change_Signal(Keys, j, structnum, keyflag, Irp);
+                            break;
+                        }
                     }
-                }
-            }
-            else if (CHOOSE_TABLE_CODE == UNICODE_TABLE) {
-                for (ULONG j = 0; j < ARRAYSIZE(gMappingTable); ++j) {
-                    if (gMappingTable[j].scanCode == Keys[0].MakeCode) {
-                        Change_Signal(Keys, j, structnum, keyflag, Irp);
-                        break;
+                    break;
+                case UNICODE_TABLE:
+                    for (ULONG j = 0; j < ARRAYSIZE(gMappingTable); ++j) {
+                        if (gMappingTable[j].scanCode == Keys[0].MakeCode) {
+                            Change_Signal(Keys, j, structnum, keyflag, Irp);
+                            break;
+                        }
                     }
-                }
-            }          
-            else if (CHOOSE_TABLE_CODE == USER_TABLE) {
-                for (ULONG j = 0; j < ARRAYSIZE(gMappingTable); ++j) {
-                    if (gMappingTable[j].scanCode == Keys[0].MakeCode) {
-                        Change_Signal(Keys, j, structnum, keyflag, Irp);
-                        break;
+                    break;
+                case USER_TABLE:
+                    for (ULONG j = 0; j < ARRAYSIZE(gMappingTable); ++j) {
+                        if (gMappingTable[j].scanCode == Keys[0].MakeCode) {
+                            Change_Signal(Keys, j, structnum, keyflag, Irp);
+                            break;
+                        }
                     }
-                }
+                    break;
             }
         }
     }
