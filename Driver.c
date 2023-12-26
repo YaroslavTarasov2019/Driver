@@ -214,7 +214,7 @@ NTSTATUS DriverEntry(PDRIVER_OBJECT DriverObject, PUNICODE_STRING RegistryPath)
     {
         KdPrint(("attaching succeeds\r\n"));
     }
-    ReadFile(L"\\??\\C:\\1\\OS\\settings.txt");
+    ReadFile(L"\\??\\C:\\Driver\\settings.txt");
     return status;
 }
 
